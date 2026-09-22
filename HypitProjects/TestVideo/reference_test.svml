@@ -1,0 +1,30 @@
+<?svml using="@hypit/markup@1"?>
+
+<svml>
+  <import as="text" from="@hypit/text@1"/>
+  <import as="gpt" from="@hypit/gpt-image@1"/>
+  <import as="seedance" from="@hypit/seedance@1"/>
+
+  <text:Value id="image-prompt">Realistic vertical smartphone video frame in an ordinary outdoor backyard under overcast daylight. A circular blue trampoline fills the lower foreground. Behind it are weathered grey wooden sheds with sloped roofs. A person wearing a black bat-like superhero costume, pointed mask and a large black cape stands on the edge of a shed roof preparing to jump toward the trampoline. Static camera, amateur social-media fail-video look, natural proportions, realistic environment, full body visible, no text, no logo, no watermark.</text:Value>
+
+  <gpt:Image
+    id="local-image"
+    prompt={image-prompt}
+    aspect-ratio="9:16"
+    resolution="1K"
+  />
+
+  <text:Value id="motion-prompt">Static camera. The black caped superhero steps and jumps from the shed roof toward the trampoline, drops naturally under gravity, hits the trampoline awkwardly, the trampoline compresses and rebounds, launching the person upward and sideways. The large cape flaps strongly during the fall and rebound. Preserve the same backyard, sheds and trampoline. One continuous realistic comedic fail shot. No scene change, no camera movement, no morphing, no extra people, stable costume and identity.</text:Value>
+
+  <seedance:FrameVideo
+    id="local-video"
+    model="mini"
+    prompt={motion-prompt}
+    duration="4"
+    resolution="480p"
+    aspect-ratio="9:16"
+    generate-audio="false"
+    first-frame={local-image.image}
+    first-frame-person-reference="false"
+  />
+</svml>
