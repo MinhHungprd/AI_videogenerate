@@ -184,7 +184,7 @@ Repo co them local orchestration mode qua Ollama.
 
 Model mac dinh:
 
-    qwen3-vl:4b
+    qwen3.5:4b
 
 Model nay co vision + tool calling va phu hop hon voi RTX 4060 8 GB.
 
@@ -206,7 +206,7 @@ Start local Codex:
 
 This launches Codex through local Ollama:
 
-    ollama launch codex --model qwen3-vl:4b
+    ollama launch codex --model qwen3.5:4b
 
 Full local-agent instructions are in LOCAL_AGENT.md.
 
