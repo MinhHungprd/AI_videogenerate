@@ -31,7 +31,18 @@ Write-Host '=== RECOVER FAILED HYPIT RANKING BUILD ==='
 Write-Host "Failed build: $FailedBuildId"
 Write-Host ''
 
-# Force software browser mode to bypass the BOM-producing Chrome GPU probe.
+# The first deploy on Windows PowerShell 5.1 wrote package.json with UTF-8 BOM.
+# HyperFrames/Producer has a strict JSON.parse(readFileSync(..., "utf-8")) path and
+# rejects that BOM during render preparation. Normalize the authored workspace JSON
+# before invoking HyperFrames.
+$PackagePath = Join-Path $Workspace 'package.json'
+if (Test-Path -LiteralPath $PackagePath) {
+    $packageText = Get-Content -Raw -LiteralPath $PackagePath
+    Write-Utf8NoBom -Path $PackagePath -Content $packageText
+}
+
+# Force software browser mode so this recovery also bypasses the separate Chrome
+# hardware-GPU probe path on this Windows machine.
 $runtimeJson = Get-Content -Raw -LiteralPath $Runtime | ConvertFrom-Json
 if ($null -eq $runtimeJson.endpoints.'hyperframes.local'.config) {
     $runtimeJson.endpoints.'hyperframes.local' | Add-Member -NotePropertyName config -NotePropertyValue ([pscustomobject]@{})
