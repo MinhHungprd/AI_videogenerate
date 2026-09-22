@@ -1,0 +1,23 @@
+﻿# SDD ledger — plan: D:\AI\setup_specs\2026-09-22-checkpoint-1-hypit-foundation-plan.md
+
+Ruling: Use `D:\AI` as the isolated workspace instead of creating a Git worktree — the approved task installs an independent source clone and forbids changes to the existing checkout — cost if wrong: setup artifacts remain outside a feature branch.
+Ruling: Use precheck → mutation → postcheck for installation/configuration tasks — no product code is created in checkpoint 1, so unit-test RED/GREEN is inapplicable — cost if wrong: installation behavior is verified operationally rather than by unit tests.
+Pre-flight: Tasks 1→2 provide logs; 2→3 provides tools; 3→4 provides checkout and package-manager pin; 4→5 provides dependencies; 5→6 provides verified source; 6→7 provides CLI; 7→8 provides skill; 8→9 provides initialized project. No interface conflict found.
+Task 1: complete (immutable repo verified; approved directories and baseline logs created).
+Task 2: Ruling: Rebuild the current process PATH from existing Machine/User values for verification — Winget updated persisted PATH but the parent process retained a stale copy; no PATH value was modified — cost if wrong: only this process sees an incorrect search order.
+Task 2: complete (uv 0.12.17 and FFmpeg/FFprobe 9.0.2 installed and executable after environment refresh; PATH not manually edited).
+Task 3: Ruling: Treat Git progress on stderr as diagnostic output and validate the resulting checkout directly — PowerShell promoted non-error stderr under Stop preference — cost if wrong: a partial clone could be accepted, mitigated by Git status/remote/HEAD/package checks.
+Task 3: complete (official clean Hypit checkout at 9c9918d0cedf2f06574ab0d517b1b6b0afb56a66; {"version":"0.2.12","packageManager":"pnpm@10.33.0","engines":{"node":">=22.15.0"}}).
+Task 4: Ruling: Enable the Corepack pnpm shim in the existing user npm prefix $prefix — protected Program Files rejected the default shim and Corepack explicitly supports --install-directory; this avoids elevation, PATH edits, and version drift — cost if wrong: pnpm resolution depends on the existing user npm prefix remaining on PATH.
+Task 4: complete (pnpm 10.33.0 activated via Corepack user-scope shim; frozen install exit 0; lockfile SHA-256 unchanged: 824C13C5C301A33EDD83776AD809B0CA621ABCF1875E7275FCC3008E136754CA).
+Task 5: Ruling: Re-run tests with persisted Machine/User PATH loaded into the test process — first run inherited the pre-Winget PATH, causing spawnSync(ffmpeg) status null and three FFmpeg skips; isolated failing test passed after refresh — cost if wrong: a real FFmpeg compatibility issue could be masked, mitigated by the full suite rerun.
+Task 5: complete (pnpm check exit 0; full pnpm test exit 0 after PATH refresh; direct CLI 0.2.12; source clean).
+Task 6: Ruling: Reinstall the identical archive with npm 11.11.0 because npm 12 blocked koffi/esbuild install scripts; use `hypit.cmd` because PowerShell policy intentionally blocks `hypit.ps1` — system npm and policy remain unchanged — cost if wrong: global dependency scripts rely on npm 11 behavior.
+Task 6: complete (built D:\AI\hypit\dist\release\hypit-hypit-0.2.12.tgz with npm 11.11.0; SHA-256 EB5ADAAF4FBE14E2F02A0F03DB6D895862D75B195C4CA2C06081E6EE483ED50F; global Hypit 0.2.12 installed at C:\Users\Khach\AppData\Roaming\npm\hypit.cmd; version check exit 0).
+Task 7: Ruling: Accept the Codex skill installation despite the installer reporting that unrelated PromptScript does not support global installs — Codex target explicitly completed at the expected user discovery root — cost if wrong: another agent integration remains unavailable, while Codex Hypit use is unaffected.
+Task 7: complete (Hypit skill installed and readable at C:\Users\Khach\.agents\skills\hypit\SKILL.md; restart Codex only if the current process does not refresh discovery).
+Task 8: complete (standalone TestVideo project initialized; hypit paths exit 0; no Runtime program or Worker started).
+Task 9: complete (fresh final gate PASS; Hypit 0.2.12 at 9c9918d0cedf2f06574ab0d517b1b6b0afb56a66; original checkout unchanged; logs credential scan clean).
+Final review: self-review (subagent dispatch prohibited by active collaboration policy; this checkpoint has no code diff or development branch).
+Final: Ruling: Keep the ledger and plan workspace under `D:\AI\setup_logs`/`setup_specs` — they are required audit and rollback records, not disposable Git scratch — cost if wrong: minor retained disk usage.
+Final: Ruling: Skip branch integration menu — the requested output is an installed environment on a clean official clone, with no feature branch or commits to merge — cost if wrong: no PR-based review exists for machine-local setup state.

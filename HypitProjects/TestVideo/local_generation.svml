@@ -1,0 +1,15 @@
+<?svml using="@hypit/markup@1"?>
+
+<svml>
+  <import as="text" from="@hypit/text@1"/>
+  <import as="gpt" from="@hypit/gpt-image@1"/>
+  <import as="seedance" from="@hypit/seedance@1"/>
+
+  <text:Value id="image-prompt">Cinematic vertical establishing shot of a futuristic riverside city in Vietnam at golden hour, realistic architecture, warm natural light, centered composition, no text, no watermark.</text:Value>
+  <gpt:Image id="local-image" prompt={image-prompt} aspect-ratio="9:16" resolution="1K"/>
+
+  <text:Value id="motion-prompt">The subject makes subtle natural movements. Static camera. Stable identity. Natural motion. No scene change.</text:Value>
+  <seedance:FrameVideo id="local-video" model="mini" prompt={motion-prompt}
+    duration="4" resolution="480p" aspect-ratio="9:16" generate-audio="false"
+    first-frame={local-image.image} first-frame-person-reference="false"/>
+</svml>

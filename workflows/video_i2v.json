@@ -1,0 +1,81 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 20260924,
+      "steps": 30,
+      "cfg": 5.0,
+      "sampler_name": "uni_pc",
+      "scheduler": "simple",
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["55", 0],
+      "model": ["48", 0],
+      "denoise": 1.0
+    },
+    "class_type": "KSampler",
+    "_meta": {"title": "Wan 2.2 Sampler"}
+  },
+  "6": {
+    "inputs": {
+      "text": "The subject makes subtle natural movements. Static camera. Stable identity. Natural motion. No scene change.",
+      "clip": ["38", 0]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {"title": "Positive Prompt"}
+  },
+  "7": {
+    "inputs": {
+      "text": "overexposed, static, blurred details, subtitles, painting, low quality, JPEG artifacts, deformed, disfigured, fused fingers, cluttered background, camera movement, scene change",
+      "clip": ["38", 0]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {"title": "Negative Prompt"}
+  },
+  "8": {
+    "inputs": {
+      "samples": ["3", 0],
+      "vae": ["39", 0],
+      "tile_size": 256,
+      "overlap": 64,
+      "temporal_size": 24,
+      "temporal_overlap": 8
+    },
+    "class_type": "VAEDecodeTiled",
+    "_meta": {"title": "Tiled VAE Decode"}
+  },
+  "37": {
+    "inputs": {"unet_name": "wan2.2_ti2v_5B_fp16.safetensors", "weight_dtype": "fp8_e4m3fn"},
+    "class_type": "UNETLoader",
+    "_meta": {"title": "Load Wan 2.2 TI2V 5B"}
+  },
+  "38": {
+    "inputs": {"clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "type": "wan", "device": "cpu"},
+    "class_type": "CLIPLoader",
+    "_meta": {"title": "Load UMT5 FP8"}
+  },
+  "39": {
+    "inputs": {"vae_name": "wan2.2_vae.safetensors"},
+    "class_type": "VAELoader",
+    "_meta": {"title": "Load Wan 2.2 VAE"}
+  },
+  "47": {
+    "inputs": {"images": ["8", 0], "filename_prefix": "checkpoint4/wan22_i2v", "codec": "vp9", "fps": 24.0, "crf": 24.0},
+    "class_type": "SaveWEBM",
+    "_meta": {"title": "Save Video"}
+  },
+  "48": {
+    "inputs": {"model": ["37", 0], "shift": 8.0},
+    "class_type": "ModelSamplingSD3",
+    "_meta": {"title": "Model Sampling"}
+  },
+  "55": {
+    "inputs": {"vae": ["39", 0], "width": 480, "height": 864, "length": 73, "batch_size": 1, "start_image": ["57", 0]},
+    "class_type": "Wan22ImageToVideoLatent",
+    "_meta": {"title": "Wan 2.2 Image-to-Video"}
+  },
+  "57": {
+    "inputs": {"image": "checkpoint3_input.png"},
+    "class_type": "LoadImage",
+    "_meta": {"title": "Input Image"}
+  }
+}

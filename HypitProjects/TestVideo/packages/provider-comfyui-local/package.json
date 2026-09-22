@@ -1,0 +1,19 @@
+{
+  "name": "@local/provider-comfyui-local",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "hypit": {"activation": "./dist/activation.js"},
+  "exports": {".": "./dist/provider.js"},
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "@hypit/hypit": "file:D:/AI/hypit/dist/release/hypit-hypit-0.2.12.tgz",
+    "@types/node": "24.10.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,266 @@
+# ============================================================
+# D:\AI - Local AI Video Workspace
+# Track: configs, workflows, scripts, provider code, docs
+# Ignore: models, dependencies, caches, generated media
+# ============================================================
+
+
+# ------------------------------------------------------------
+# Upstream repositories
+# Keep these as external dependencies, not vendored copies.
+# Record their commit/version in README instead.
+# ------------------------------------------------------------
+/hypit/
+/ComfyUI/
+
+
+# ------------------------------------------------------------
+# AI MODEL WEIGHTS
+# Never commit large model files
+# ------------------------------------------------------------
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.gguf
+*.onnx
+*.engine
+*.tflite
+*.pb
+
+/models/
+**/models/checkpoints/
+**/models/diffusion_models/
+**/models/text_encoders/
+**/models/vae/
+**/models/clip/
+**/models/clip_vision/
+**/models/unet/
+**/models/loras/
+**/models/controlnet/
+**/models/upscale_models/
+**/models/embeddings/
+
+
+# ------------------------------------------------------------
+# Python
+# ------------------------------------------------------------
+**/.venv/
+**/venv/
+**/env/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+
+.python-version
+
+
+# ------------------------------------------------------------
+# Node.js
+# ------------------------------------------------------------
+**/node_modules/
+**/.npm/
+**/.pnpm-store/
+**/.yarn/
+**/.turbo/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# ------------------------------------------------------------
+# Hypit runtime state
+# Keep source project files such as:
+# *.svml
+# *.svrun
+# *.svs
+# hypit.runtime.json
+# ------------------------------------------------------------
+**/.hypit/execution/
+**/.hypit/cache/
+**/.hypit/tmp/
+**/.hypit/temp/
+
+**/results/
+**/build-results/
+
+
+# ------------------------------------------------------------
+# ComfyUI runtime/cache
+# ------------------------------------------------------------
+**/ComfyUI/output/
+**/ComfyUI/temp/
+**/ComfyUI/input/
+**/ComfyUI/user/default/workflows/.autosave/
+
+
+# ------------------------------------------------------------
+# Generated media
+# ------------------------------------------------------------
+**/output/
+**/outputs/
+**/generated/
+**/renders/
+**/render/
+**/temp/
+**/tmp/
+
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
+
+*.wav
+*.mp3
+*.flac
+*.aac
+*.m4a
+
+# Uncomment these if generated images become large/noisy
+# *.png
+# *.jpg
+# *.jpeg
+# *.webp
+
+
+# ------------------------------------------------------------
+# Reference/input media
+# Usually large and not suitable for GitHub
+# ------------------------------------------------------------
+**/input/*.mp4
+**/input/*.mov
+**/input/*.mkv
+**/input/*.avi
+**/input/*.webm
+**/input/*.wav
+**/input/*.mp3
+
+
+# ------------------------------------------------------------
+# Setup / runtime logs
+# ------------------------------------------------------------
+/setup_logs/*.log
+/setup_logs/*.txt
+
+*.log
+
+
+# Keep useful markdown audit/rollback docs
+!/setup_logs/*.md
+
+
+# ------------------------------------------------------------
+# Backups
+# ------------------------------------------------------------
+/config_backup/
+
+*.bak
+*.backup
+*.old
+*.orig
+
+
+# ------------------------------------------------------------
+# Secrets / local environment
+# ------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+
+credentials.json
+secrets.json
+token.json
+tokens.json
+
+**/credentials/
+**/secrets/
+
+
+# ------------------------------------------------------------
+# OS / IDE
+# ------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+*~
+
+
+# ------------------------------------------------------------
+# Windows
+# ------------------------------------------------------------
+$RECYCLE.BIN/
+System Volume Information/
+
+
+# ------------------------------------------------------------
+# Archives / installers / downloads
+# ------------------------------------------------------------
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.exe
+*.msi
+
+
+# ------------------------------------------------------------
+# Build artifacts
+# ------------------------------------------------------------
+**/dist/
+**/build/
+**/.cache/
+**/.parcel-cache/
+**/.vite/
+**/coverage/
+
+
+# ------------------------------------------------------------
+# IMPORTANT FILES WE DO WANT TO TRACK
+# ------------------------------------------------------------
+
+# Workflows
+!/workflows/
+!/workflows/**/*.json
+
+# PowerShell automation
+!/*.ps1
+
+# Documentation
+!/*.md
+
+# Setup specifications
+!/setup_specs/
+!/setup_specs/**/*.md
+
+# Hypit project source
+!/HypitProjects/
+!/HypitProjects/**/*.svml
+!/HypitProjects/**/*.svrun
+!/HypitProjects/**/*.svs
+!/HypitProjects/**/hypit.runtime.json
+
+# Local Hypit provider source
+!/HypitProjects/**/packages/
+!/HypitProjects/**/packages/**/*.ts
+!/HypitProjects/**/packages/**/*.js
+!/HypitProjects/**/packages/**/*.json
+!/HypitProjects/**/packages/**/*.md

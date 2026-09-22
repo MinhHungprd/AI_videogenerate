@@ -1,0 +1,55 @@
+{
+  "format": "hypit.runtime-local@1",
+  "dataRoot": ".hypit/runtimes/local",
+  "credentials": {},
+  "endpoints": {
+    "media.local": {
+      "use": "@hypit/provider-media-local",
+      "config": {
+        "ffmpegPath": "C:/Users/Khach/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg.Shared_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.2-full_build-shared/bin/ffmpeg.exe",
+        "ffprobePath": "C:/Users/Khach/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg.Shared_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.2-full_build-shared/bin/ffprobe.exe"
+      }
+    },
+    "hyperframes.local": {
+      "use": "@hypit/provider-hyperframes-local",
+      "config": {
+        "ffmpegPath": "C:/Users/Khach/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg.Shared_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.2-full_build-shared/bin/ffmpeg.exe",
+        "ffprobePath": "C:/Users/Khach/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg.Shared_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.2-full_build-shared/bin/ffprobe.exe"
+      }
+    },
+    "whisperx.local": {
+      "use": "@hypit/provider-whisperx-local",
+      "config": {
+        "expectedModel": "small",
+        "expectedDevice": "cuda",
+        "expectedCompute": "float16",
+        "expectedBatchSize": 8,
+        "serviceCommand": [
+          "C:/Windows/System32/cmd.exe",
+          "/d",
+          "/s",
+          "/c",
+          "D:/AI/HypitProjects/TestVideo/scripts/start_whisperx_cuda.cmd"
+        ],
+        "alignmentLanguages": [
+          "vi",
+          "en"
+        ]
+      }
+    },
+    "comfyui.local": {
+      "use": "@local/provider-comfyui-local",
+      "config": {
+        "baseUrl": "http://127.0.0.1:8188",
+        "workflowRoot": "D:/AI/workflows",
+        "localOnly": true,
+        "pollIntervalMs": 2000
+      }
+    }
+  },
+  "bindings": {
+    "@hypit/whisperx@1#whisperx-alignment": "whisperx.local",
+    "@hypit/gpt-image@1#gpt-image-2": "comfyui.local",
+    "@hypit/seedance@1#seedance-2-mini": "comfyui.local"
+  }
+}

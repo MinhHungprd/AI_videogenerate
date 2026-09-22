@@ -1,0 +1,22 @@
+<?svml using="@hypit/markup@1"?>
+
+<svml>
+  <import as="time" from="@hypit/timeline-author@1"/>
+  <import as="spatial" from="@hypit/spatial@1"/>
+  <import as="screen" from="@hypit/screen-overlay@1"/>
+  <import as="film" from="@hypit/film@1"/>
+  <import as="render" from="@hypit/render-hyperframes@1"/>
+  <import as="style" source="./hyperframes_overlay.svs"/>
+
+  <time:Clock id="clock" frame-rate="24"/>
+  <time:Timeline id="timeline" clock={clock} end="4s"/>
+  <spatial:Canvas id="vertical" width="1080" height="1920"/>
+  <screen:Track id="graphics" timeline={timeline.timeline} canvas={vertical}>
+    <screen:ScanLines during="program" z="10" spacing="48" thickness="2" angle="-8" opacity="0.12" travel="96"/>
+    <screen:Vignette during="program" z="20" center-x="0.5" center-y="0.5" radius-x="0.55" radius-y="0.6" softness="0.75" color="#000000" opacity="0.45"/>
+  </screen:Track>
+  <film:Film id="main" canvas={vertical} timeline={timeline.timeline} appearance={style.film.overlay}>
+    <film:Track source={graphics.track}/>
+  </film:Film>
+  <render:Video id="overlay" composition={main.composition} timeline={timeline.timeline}/>
+</svml>
