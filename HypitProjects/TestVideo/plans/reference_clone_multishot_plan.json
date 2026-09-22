@@ -1,0 +1,80 @@
+{
+  "format": "local-video-shot-plan@2",
+  "name": "reference-trampoline-clone-multishot",
+  "source": {
+    "expectedPath": "input/reference.mp4",
+    "observedDurationSeconds": 4.266667,
+    "observedVideo": {
+      "codec": "h264",
+      "width": 576,
+      "height": 1024,
+      "fps": 30,
+      "aspect": "9:16"
+    },
+    "observedAudio": {
+      "present": true,
+      "strategy": "reuse-original-audio"
+    }
+  },
+  "goal": {
+    "type": "reference-idea-clone",
+    "description": "Recreate the recognizable idea and action rhythm of the supplied reference rather than inventing a new scene.",
+    "preserve": [
+      "static vertical phone-video framing",
+      "same backyard/shed/trampoline spatial idea",
+      "black bat-like caped superhero",
+      "roof jump toward the trampoline",
+      "trampoline impact and rebound",
+      "sideways rebound into the right shed",
+      "comedic fail-video energy",
+      "ranking-style social-video framing"
+    ],
+    "qualityPriority": [
+      "body stability",
+      "reference composition",
+      "action continuity",
+      "scene consistency",
+      "motion intensity"
+    ]
+  },
+  "constraints": {
+    "localOnly": true,
+    "videoModel": "Wan 2.2 TI2V 5B",
+    "hypitCapability": "@hypit/seedance@1#seedance-2-mini",
+    "generationDurationSeconds": 4,
+    "generationResolution": "480p",
+    "generationAspectRatio": "9:16",
+    "generationFps": 24,
+    "finalWidth": 1080,
+    "finalHeight": 1920,
+    "finalCodec": "H.264",
+    "note": "Seedance mini's author contract requires whole 4+ second generations. Each local Wan clip is therefore generated as 4 seconds, then trimmed to the reference timing during deterministic FFmpeg assembly."
+  },
+  "shots": [
+    {
+      "id": "shot-01-jump",
+      "firstFrameAtSeconds": 0.2,
+      "generationDurationSeconds": 4,
+      "finalDurationSeconds": 2.2,
+      "firstFrameFile": "shot_01_first.jpg",
+      "personReference": true,
+      "motionPrompt": "Use the supplied first frame as the visual truth. Keep the same vertical phone-video composition, grey sheds, blue trampoline, overcast outdoor lighting, black bat-like superhero costume, cape and body proportions. The superhero balances on the right shed roof, then commits to the jump toward the center of the trampoline. Motion is physically plausible and continuous: step off, controlled fall, cape opens and flaps, feet and torso descend toward the trampoline. Keep the camera completely static. Preserve the ranking-style on-screen graphics as static screen graphics as much as possible. Do not change the yard layout, do not add people, do not change costume, do not morph limbs, hands, face or torso."
+    },
+    {
+      "id": "shot-02-rebound-crash",
+      "firstFrameAtSeconds": 2.2,
+      "generationDurationSeconds": 4,
+      "finalDurationSeconds": 2.066667,
+      "firstFrameFile": "shot_02_first.jpg",
+      "personReference": true,
+      "motionPrompt": "Use the supplied first frame as the visual truth and continue the recognizable trampoline-fail idea. Keep the same vertical static phone-video framing, blue trampoline, grey sheds, yard, black bat-like superhero and cape. The superhero finishes the trampoline impact, the mat compresses, then rebounds strongly and throws the superhero upward and sideways toward the shed on the right. The cape flaps while the body stays anatomically stable. End with the superhero colliding awkwardly with the right shed/roof area for the comedic fail, with a small believable disturbance of loose roof material. Preserve the ranking-style on-screen graphics as static screen graphics as much as possible. No camera movement, no scene change, no extra people, no body morphing, no duplicated limbs, no costume transformation."
+    }
+  ],
+  "execution": {
+    "runner": "scripts/run_reference_clone_multishot.ps1",
+    "generatedSourceDirectory": ".generated/reference_clone",
+    "frameDirectory": "reference_analysis/shots",
+    "shotOutputDirectory": "output/reference_clone_shots",
+    "finalPath": "output/reference_remake.mp4"
+  }
+}
