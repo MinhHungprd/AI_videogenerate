@@ -270,3 +270,6 @@ System Volume Information/
 !/HypitProjects/**/packages/**/*.js
 !/HypitProjects/**/packages/**/*.json
 !/HypitProjects/**/packages/**/*.md
+
+# Local reference analysis artifacts
+/HypitProjects/TestVideo/reference_analysis/
