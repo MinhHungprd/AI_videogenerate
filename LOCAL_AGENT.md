@@ -6,7 +6,7 @@ This project can run the orchestration model locally instead of consuming ChatGP
 
 Default model:
 
-    qwen3-vl:4b
+    qwen3.5:4b
 
 Reason for this choice:
 
@@ -30,7 +30,7 @@ From D:\AI:
 
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup_local_agent.ps1
 
-This installs Ollama when missing and pulls qwen3-vl:4b.
+This installs Ollama when missing and pulls qwen3.5:4b.
 
 ## Prepare a reference video
 
@@ -60,7 +60,7 @@ From D:\AI:
 
 The launcher uses:
 
-    ollama launch codex --model qwen3-vl:4b
+    ollama launch codex --model qwen3.5:4b
 
 The Codex UI/tool shell is reused, but model inference is served by local Ollama.
 
@@ -105,7 +105,7 @@ Inside the locally launched Codex session:
     IMPORTANT RTX 4060 8GB VRAM rule:
     Immediately before a GPU-heavy ComfyUI image/video generation command,
     run:
-        ollama stop qwen3-vl:4b
+        ollama stop qwen3.5:4b
     to free local-agent VRAM.
     Ollama may reload the model automatically for the next agent turn.
 
@@ -123,4 +123,18 @@ Exit Codex first, then:
 
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File D:\AI\stop_local_agent.ps1
 
-The script unloads qwen3-vl:4b, stops the media stack, and only terminates an Ollama server process if this workspace started that server itself.
+The script unloads qwen3.5:4b, stops the media stack, and only terminates an Ollama server process if this workspace started that server itself.
+
+
+## VRAM behavior on RTX 4060 8 GB
+
+The launcher stops whisperx.local after reference transcription is finished so its CUDA model does not stay resident while the local agent is reasoning.
+
+Before a GPU-heavy ComfyUI generation step, unload the local agent with:
+
+    ollama stop qwen3.5:4b
+
+If transcription is needed again later:
+
+    cd D:\AI\HypitProjects\TestVideo
+    hypit.cmd programs up --endpoint whisperx.local
