@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $Root = $PSScriptRoot
 $RuntimeDir = Join-Path $Root '.runtime'
 $PidFile = Join-Path $RuntimeDir 'ollama.pid'
-$Model = 'qwen3-vl:4b'
+$Model = 'qwen3.5:4b'
 $Health = 'http://127.0.0.1:11434/api/tags'
 
 New-Item -ItemType Directory -Force -Path $RuntimeDir | Out-Null
