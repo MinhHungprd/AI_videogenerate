@@ -1,0 +1,56 @@
+{
+  "format": "local-video-shot-plan@1",
+  "name": "reference-trampoline-fail-smoke-test",
+  "source": {
+    "expectedPath": "input/reference.mp4",
+    "observedDurationSeconds": 4.266667,
+    "observedVideo": {"codec": "h264", "width": 576, "height": 1024, "fps": 30, "aspect": "9:16"},
+    "observedAudio": {"present": true, "codec": "aac", "sampleRate": 44100, "channels": 2, "transcriptAnalyzed": false}
+  },
+  "referenceAnalysis": {
+    "structure": "single continuous shot",
+    "camera": "static vertical phone-video framing",
+    "scene": "outdoor backyard/yard with a circular blue trampoline in the foreground, grey sheds behind it and an overcast sky",
+    "subject": "person in a black bat-like superhero costume with a large cape",
+    "action": "subject starts at the shed roof edge, jumps/drops toward the trampoline, impacts/bounces and is launched awkwardly while the cape flaps",
+    "style": "realistic low-fi social-media fail clip, comedic, fast action",
+    "graphics": {"topTitle": "Ranking Best Trampoline Fails", "leftRanking": ["1.", "2.", "3.", "4.", "5.", "6. Batman 😭"]}
+  },
+  "goal": {
+    "type": "functional-local-generation-test",
+    "preserve": ["single-shot structure", "static camera", "vertical composition", "trampoline foreground", "shed background", "black caped superhero", "jump -> trampoline impact -> rebound motion", "comedic fail energy"],
+    "note": "This smoke test validates Z-Image -> Wan -> Hypit artifact retrieval -> FFmpeg. It does not attempt pixel-identical cloning or exact text graphics."
+  },
+  "constraints": {
+    "localOnly": true,
+    "imageModel": "Z-Image Turbo INT8",
+    "videoModel": "Wan 2.2 TI2V 5B",
+    "generationWidth": 480,
+    "generationHeight": 864,
+    "generationFps": 24,
+    "generationDurationSeconds": 4,
+    "finalWidth": 1080,
+    "finalHeight": 1920,
+    "finalCodec": "H.264"
+  },
+  "shots": [
+    {
+      "id": "shot-01",
+      "startSeconds": 0,
+      "durationSeconds": 4,
+      "imagePrompt": "Realistic vertical smartphone video frame in an ordinary outdoor backyard under overcast daylight. A circular blue trampoline fills the lower foreground. Behind it are weathered grey wooden sheds with sloped roofs. A person wearing a black bat-like superhero costume, pointed mask and a large black cape stands on the edge of a shed roof preparing to jump toward the trampoline. Static camera, amateur social-media fail-video look, natural proportions, realistic environment, full body visible, no text, no logo, no watermark.",
+      "motionPrompt": "Static camera. The black caped superhero steps and jumps from the shed roof toward the trampoline, drops naturally under gravity, hits the trampoline awkwardly, the trampoline compresses and rebounds, launching the person upward and sideways. The large cape flaps strongly during the fall and rebound. Preserve the same backyard, sheds and trampoline. One continuous realistic comedic fail shot. No scene change, no camera movement, no morphing, no extra people, stable costume and identity."
+    }
+  ],
+  "audio": {
+    "strategy": "reuse-reference-audio-for-smoke-test",
+    "note": "The supplied reference contains AAC stereo audio, but its spoken/music content was not transcribed during plan creation."
+  },
+  "execution": {
+    "authorSource": "reference_test.svml",
+    "runSource": "reference_test.svrun",
+    "generatedOutput": "local-video.video",
+    "intermediatePath": "output/reference_test_generated.webm",
+    "finalPath": "output/reference_remake.mp4"
+  }
+}
