@@ -1,0 +1,7 @@
+<?svml using="@hypit/run-markup@1"?>
+
+<svrun version="1">
+  <author source="./reference_test.svml"/>
+  <target output="local-image.image"/>
+  <target output="local-video.video"/>
+</svrun>
