@@ -273,3 +273,6 @@ System Volume Information/
 
 # Local reference analysis artifacts
 /HypitProjects/TestVideo/reference_analysis/
+/HypitProjects/TestVideo/.generated/
+/HypitProjects/TestVideo/reference_analysis/shots/
+/HypitProjects/TestVideo/output/reference_clone_shots/
