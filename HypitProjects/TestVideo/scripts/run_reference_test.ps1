@@ -34,7 +34,18 @@ Push-Location $Project
 try {
     if (Get-Command ollama.exe -ErrorAction SilentlyContinue) {
         Write-Host '[INFO] Unloading local planner model to free VRAM...'
-        & ollama.exe stop qwen3.5:4b 2>$null
+        try {
+            $payload = @{
+                model = 'qwen3.5:4b'
+                prompt = ''
+                stream = $false
+                keep_alive = 0
+            } | ConvertTo-Json -Compress
+
+            $null = Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/generate' -Method Post -ContentType 'application/json' -Body $payload -TimeoutSec 30
+        } catch {
+            Write-Warning ('Could not unload qwen3.5:4b through Ollama API: ' + $_.Exception.Message)
+        }
     }
 
     Write-Host '[INFO] Stopping WhisperX helper for this GPU-heavy smoke test...'
