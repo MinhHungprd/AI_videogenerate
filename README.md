@@ -235,3 +235,63 @@ The runner validates the Hypit author/run files, executes local Z-Image -> Wan, 
 Expected output:
 
     D:\AI\HypitProjects\TestVideo\output\reference_remake.mp4
+
+
+## Reference-first multishot clone
+
+This is the recommended reference-remake test after the basic smoke test.
+
+It does NOT ask Z-Image to invent the opening frame. Instead it:
+
+    reference.mp4
+      -> extract REAL reference frames
+      -> use @hypit/media Image artifacts as Wan first-frame inputs
+      -> generate two local Wan shots
+      -> trim each generated shot back to the reference timing
+      -> concatenate the shots
+      -> restore the original reference audio
+      -> encode H.264 1080x1920
+      -> verify duration and resolution
+
+Plan:
+
+    HypitProjects/TestVideo/plans/reference_clone_multishot_plan.json
+
+The current trampoline reference is split into two action phases:
+
+    shot 1: roof setup -> jump toward trampoline
+    shot 2: impact -> rebound -> crash toward the right shed
+
+Important: the local Seedance mini author contract accepts whole 4+ second generations, while the current local provider is configured for 4 seconds. Therefore each shot is generated as 4 seconds and deterministically trimmed to the shorter reference interval during FFmpeg assembly.
+
+Expected input:
+
+    D:\AI\HypitProjects\TestVideo\input\reference.mp4
+
+Make sure the local media stack is running:
+
+    cd D:\AI
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\start_ai_video.ps1
+
+Then run the clone:
+
+    cd D:\AI\HypitProjects\TestVideo
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_reference_clone_multishot.ps1
+
+Expected final output:
+
+    D:\AI\HypitProjects\TestVideo\output\reference_remake.mp4
+
+Intermediate real first frames are extracted under:
+
+    reference_analysis\shots\
+
+Generated local Hypit author/run files are written under:
+
+    .generated\reference_clone\
+
+Generated Wan shot artifacts are written under:
+
+    output\reference_clone_shots\
+
+The runner unloads active Ollama models and stops whisperx.local before GPU-heavy Wan generation to leave as much VRAM as possible for the RTX 4060 8 GB.
