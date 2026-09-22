@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $Root = $PSScriptRoot
 $RuntimeDir = Join-Path $Root '.runtime'
 $PidFile = Join-Path $RuntimeDir 'ollama.pid'
-$Model = 'qwen3-vl:4b'
+$Model = 'qwen3.5:4b'
 
 $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
 $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
