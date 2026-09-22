@@ -14,6 +14,16 @@ $ProviderSource = Join-Path $LocalProjectRoot 'packages\provider-comfyui-local'
 $BaseRuntimePath = Join-Path $LocalProjectRoot 'hypit.runtime.json'
 $RuntimeOutput = Join-Path $Target 'hypit.runtime.local-ai.json'
 
+function Write-Utf8NoBom {
+    param(
+        [Parameter(Mandatory=$true)][string]$Path,
+        [Parameter(Mandatory=$true)][string]$Content
+    )
+
+    $encoding = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $encoding)
+}
+
 function Copy-TreeClean {
     param(
         [Parameter(Mandatory=$true)][string]$Source,
@@ -95,7 +105,8 @@ if ($null -eq $pkg.dependencies) {
     $pkg | Add-Member -NotePropertyName dependencies -NotePropertyValue ([pscustomobject]@{})
 }
 $pkg.dependencies | Add-Member -NotePropertyName '@local/provider-comfyui-local' -NotePropertyValue 'file:packages/provider-comfyui-local' -Force
-$pkg | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $PackagePath -Encoding utf8
+$packageJson = $pkg | ConvertTo-Json -Depth 20
+Write-Utf8NoBom -Path $PackagePath -Content $packageJson
 
 Push-Location $Target
 try {
@@ -135,7 +146,8 @@ $runtime = [ordered]@{
     }
 }
 
-$runtime | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $RuntimeOutput -Encoding utf8
+$runtimeJson = $runtime | ConvertTo-Json -Depth 30
+Write-Utf8NoBom -Path $RuntimeOutput -Content $runtimeJson
 
 Write-Host '[6/6] Installing authored font dependencies, then validating the local sample...'
 Push-Location $Target
