@@ -59,9 +59,9 @@ ComfyUI:
 Hypit:
 
     cd D:\AI\HypitProjects\TestVideo
-    hypit runtime status
-    hypit programs status --verbose
-    hypit doctor
+    hypit.cmd runtime status
+    hypit.cmd programs status --verbose
+    hypit.cmd doctor
 
 Automation scripts:
 
