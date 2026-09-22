@@ -137,9 +137,14 @@ $runtime = [ordered]@{
 
 $runtime | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $RuntimeOutput -Encoding utf8
 
-Write-Host '[6/6] Validating the local sample and its generation plan...'
+Write-Host '[6/6] Installing authored font dependencies, then validating the local sample...'
 Push-Location $Target
 try {
+    & hypit.cmd packages install '@fontsource-variable/inter@5.3.0'
+    if ($LASTEXITCODE -ne 0) {
+        throw "hypit packages install for Inter failed with exit code $LASTEXITCODE"
+    }
+
     & hypit.cmd check .\reference-local.svrun
     if ($LASTEXITCODE -ne 0) {
         throw "hypit check failed with exit code $LASTEXITCODE"
