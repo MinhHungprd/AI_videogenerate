@@ -295,3 +295,28 @@ Generated Wan shot artifacts are written under:
     output\reference_clone_shots\
 
 The runner unloads active Ollama models and stops whisperx.local before GPU-heavy Wan generation to leave as much VRAM as possible for the RTX 4060 8 GB.
+
+
+## Hypit official sample - local AI test
+
+Tier 2 test uses Hypit's official ranking-football example as the base, but deploys a sibling local-only workspace so the upstream sample stays untouched.
+
+Deploy:
+
+    cd D:\AI
+    git pull --ff-only
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\deploy_hypit_ranking_local.ps1 -Force
+
+Run the complete local sample:
+
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\run_hypit_ranking_local.ps1
+
+Workspace created by the deployer:
+
+    D:\AI\hypit\examples\ranking-football-local
+
+Expected final output:
+
+    D:\AI\hypit\examples\ranking-football-local\output\final-local.mp4
+
+This test uses the current local Z-Image + Wan provider and then continues through Hypit's Media Track, Ranking TierBoard, soundtrack, Film, HyperFrames and FFmpeg layers. See hypit_examples/ranking-football-local/README.md for details.
