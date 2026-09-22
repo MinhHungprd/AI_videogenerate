@@ -176,3 +176,40 @@ Provider local implements Hypit generation capability contracts va route request
 - Local provider reject ComfyUI URL khong phai loopback.
 - Launcher set LOCAL_GENERATION_ONLY=true.
 - Runtime profile hien tai khong cau hinh cloud generation fallback.
+
+
+## Local agent (khong dung Codex credit)
+
+Repo co them local orchestration mode qua Ollama.
+
+Model mac dinh:
+
+    qwen3-vl:4b
+
+Model nay co vision + tool calling va phu hop hon voi RTX 4060 8 GB.
+
+One-time setup:
+
+    cd D:\AI
+    git pull --ff-only
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup_local_agent.ps1
+
+Prepare reference:
+
+    cd D:\AI\HypitProjects\TestVideo
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\prepare_reference_local.ps1
+
+Start local Codex:
+
+    cd D:\AI
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\start_local_agent.ps1
+
+This launches Codex through local Ollama:
+
+    ollama launch codex --model qwen3-vl:4b
+
+Full local-agent instructions are in LOCAL_AGENT.md.
+
+Stop local mode after exiting Codex:
+
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File D:\AI\stop_local_agent.ps1
