@@ -46,7 +46,7 @@ function Assert-Command([string]$Name) {
 Write-Host '=== Local AI Video: START ==='
 
 Assert-Command 'nvidia-smi.exe'
-Assert-Command 'hypit'
+Assert-Command 'hypit.cmd'
 
 & nvidia-smi.exe --query-gpu=name,memory.total,driver_version --format=csv,noheader
 if ($LASTEXITCODE -ne 0) {
@@ -120,24 +120,24 @@ if (Test-ComfyHealth) {
 Push-Location $Project
 try {
     Write-Host '[INFO] Starting Hypit managed local programs...'
-    & hypit programs up
+    & hypit.cmd programs up
     if ($LASTEXITCODE -ne 0) {
         throw "hypit programs up failed with exit code $LASTEXITCODE"
     }
 
     Write-Host '[INFO] Starting Hypit runtime...'
-    & hypit runtime up
+    & hypit.cmd runtime up
     if ($LASTEXITCODE -ne 0) {
         throw "hypit runtime up failed with exit code $LASTEXITCODE"
     }
 
     Write-Host '[INFO] Running Hypit doctor...'
-    & hypit doctor
+    & hypit.cmd doctor
     if ($LASTEXITCODE -ne 0) {
         throw "hypit doctor failed with exit code $LASTEXITCODE"
     }
 
-    & hypit runtime status
+    & hypit.cmd runtime status
     if ($LASTEXITCODE -ne 0) {
         throw "hypit runtime status failed with exit code $LASTEXITCODE"
     }
