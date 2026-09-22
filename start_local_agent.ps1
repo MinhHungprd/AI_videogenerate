@@ -58,7 +58,20 @@ Write-Host '=== LOCAL AI VIDEO AGENT ==='
 Write-Host '[1/3] Starting/checking local media stack...'
 & (Join-Path $Root 'start_ai_video.ps1')
 
-Write-Host '[2/3] Checking Ollama...'
+$reference = Join-Path $Project 'input\reference.mp4'
+$prepareScript = Join-Path $Project 'scripts\prepare_reference_local.ps1'
+if (Test-Path -LiteralPath $reference) {
+    Write-Host '[2/4] Preparing reference locally with FFmpeg + WhisperX...'
+    & $prepareScript
+    if ($LASTEXITCODE -ne 0) {
+        throw "Reference preparation failed with exit code $LASTEXITCODE"
+    }
+} else {
+    Write-Warning "Reference video is missing: $reference"
+    Write-Warning 'Local Codex will still launch, but video-clone analysis will not be prepared.'
+}
+
+Write-Host '[3/4] Checking Ollama...'
 if (-not (Test-OllamaApi)) {
     $process = Start-Process -FilePath $ollama -ArgumentList @('serve') -WindowStyle Hidden -PassThru
     Set-Content -LiteralPath $PidFile -Value $process.Id -Encoding ascii
@@ -72,7 +85,7 @@ if ($models -notmatch [regex]::Escape($Model)) {
     throw "Local model $Model is missing. Run setup_local_agent.ps1 first."
 }
 
-Write-Host '[3/3] Launching Codex with LOCAL Ollama model...'
+Write-Host '[4/4] Launching Codex with LOCAL Ollama model...'
 Write-Host "Model: $Model"
 Write-Host 'Model inference is served by local Ollama, not the ChatGPT/Codex usage pool.'
 Write-Host ''
