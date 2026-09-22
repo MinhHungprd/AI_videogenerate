@@ -14,17 +14,17 @@ $env:LOCAL_GENERATION_ONLY = 'true'
 
 Write-Host '=== Local AI Video: STOP ==='
 
-if ((Test-Path -LiteralPath $Project) -and (Get-Command hypit -ErrorAction SilentlyContinue)) {
+if ((Test-Path -LiteralPath $Project) -and (Get-Command hypit.cmd -ErrorAction SilentlyContinue)) {
     Push-Location $Project
     try {
         Write-Host '[INFO] Stopping Hypit runtime...'
-        & hypit runtime down
+        & hypit.cmd runtime down
         if ($LASTEXITCODE -ne 0) {
             Write-Warning "hypit runtime down exited with code $LASTEXITCODE"
         }
 
         Write-Host '[INFO] Stopping Hypit managed programs...'
-        & hypit programs down
+        & hypit.cmd programs down
         if ($LASTEXITCODE -ne 0) {
             Write-Warning "hypit programs down exited with code $LASTEXITCODE"
         }
