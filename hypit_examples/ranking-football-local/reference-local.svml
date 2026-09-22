@@ -1,0 +1,166 @@
+<?svml using="@hypit/markup@1"?>
+
+<svml>
+  <import as="text" from="@hypit/text@1"/>
+  <import as="asset" from="@hypit/media@1"/>
+  <import as="gpt" from="@hypit/gpt-image@1"/>
+  <import as="seedance" from="@hypit/seedance@1"/>
+  <import as="pipeline" from="@hypit/media-pipeline@1"/>
+  <import as="time" from="@hypit/timeline-author@1"/>
+  <import as="media-track" from="@hypit/media-track@1"/>
+  <import as="audio-track" from="@hypit/audio-track@1"/>
+  <import as="fonts" from="@hypit/fonts-open@1"/>
+  <import as="space" from="@hypit/spatial@1"/>
+  <import as="ranking" from="@hypit/ranking@1"/>
+  <import as="film" from="@hypit/film@1"/>
+  <import as="render" from="@hypit/render-hyperframes@1"/>
+  <import as="recipes" source="./recipes.svs"/>
+
+  <!--
+    Local adaptation of Hypit's official ranking-football example.
+
+    Deliberately supported by the current local stack:
+      - GPT Image contract -> local Z-Image Turbo, 1K
+      - Seedance Mini contract -> local Wan 2.2 TI2V 5B
+      - 480p / 9:16 / 4 seconds / no generated audio
+      - local HyperFrames + FFmpeg
+
+    The official reference.svml is not modified.
+  -->
+
+  <text:Value id="presenter-prompt">
+    Realistic vertical smartphone creator video. A stylish young adult football commentator with long dark hair,
+    subtle alternative fashion, a black short-sleeved top and a black cap sits in a bright university classroom.
+    Medium half-body framing, face clearly visible, both arms anatomically correct, looking directly into the camera.
+    Football-themed wall decorations are abstract and contain no readable text or logos.
+    Keep the presenter mostly in the upper half of the vertical frame and leave useful visual space in the lower half
+    for a ranking board overlay. Natural indoor daylight, realistic skin, realistic hands, casual social-media capture,
+    stable perspective, no watermark, no subtitles, no readable text.
+  </text:Value>
+
+  <gpt:Image id="presenter" prompt={presenter-prompt}
+    aspect-ratio="9:16" resolution="1K"/>
+
+  <text:Value id="broll-goat-prompt">
+    Photorealistic sports-comedy image of a shiny golden football trophy on a small pedestal beside a black-and-white
+    football, dramatic stadium lights in the background, realistic grass, premium sports photography, playful but
+    believable composition, no people, no logos, no readable text, no watermark.
+  </text:Value>
+
+  <text:Value id="broll-hattrick-prompt">
+    Polished studio photograph of one classic black-and-white football wearing three elegant black top hats at playful
+    angles, dark neutral background, dramatic spotlight, realistic materials, deadpan visual comedy, no logo,
+    no readable text, no watermark.
+  </text:Value>
+
+  <gpt:Image id="broll-goat" prompt={broll-goat-prompt}
+    aspect-ratio="1:1" resolution="1K"/>
+  <gpt:Image id="broll-hattrick" prompt={broll-hattrick-prompt}
+    aspect-ratio="1:1" resolution="1K"/>
+
+  <text:Value id="take-one-prompt">
+    Preserve the person, outfit, classroom, framing and identity from the supplied first frame.
+    Static smartphone camera. The football commentator looks into the lens, gives one confident nod, then makes a small
+    natural explaining gesture with one hand while keeping the other arm relaxed. Subtle facial expression changes only.
+    Natural conversational body motion, stable anatomy, stable face, stable hands, no camera movement, no scene change,
+    no new person, no object appearing from nowhere, no body morphing, no subtitles, no text.
+  </text:Value>
+
+  <text:Value id="take-two-prompt">
+    Preserve the exact presenter identity, outfit, classroom and framing from the supplied first frame.
+    Static smartphone camera. The commentator reacts with a brief amused half-smile, a small head shake and one open-palm
+    shrug, then settles back toward the starting posture. Keep motion compact and realistic.
+    Stable face, stable hands, stable anatomy, no camera motion, no scene change, no extra person, no body morphing,
+    no subtitles, no text.
+  </text:Value>
+
+  <seedance:FrameVideo id="take-one" model="mini"
+    prompt={take-one-prompt} duration="4"
+    resolution="480p" aspect-ratio="9:16" generate-audio="false"
+    first-frame={presenter.image} first-frame-person-reference="true"/>
+
+  <seedance:FrameVideo id="take-two" model="mini"
+    prompt={take-two-prompt} duration="4"
+    resolution="480p" aspect-ratio="9:16" generate-audio="false"
+    first-frame={presenter.image} first-frame-person-reference="true"/>
+
+  <!-- Reuse the official sample's supplied local assets for board identity and soundtrack. -->
+  <asset:Image id="ronaldo-icon" src="./assets/ronaldo.jpeg"/>
+  <asset:Image id="messi-icon" src="./assets/messi.jpeg"/>
+  <asset:Image id="haaland-icon" src="./assets/haaland.jpg"/>
+  <asset:Image id="mbappe-icon" src="./assets/mbappe-new.jpg"/>
+  <asset:Audio id="soundtrack" src="./assets/shared-soundtrack.m4a"/>
+
+  <time:Clock id="clock" frame-rate="30"/>
+  <time:Timeline id="program" clock={clock} end="8s"/>
+
+  <space:Canvas id="vertical" width="720" height="1280"/>
+  <space:Frame id="full-frame" within={vertical}
+    left="0%" top="0%" right="100%" bottom="100%"/>
+  <space:Frame id="tier-frame" within={vertical}
+    left="0%" top="55%" right="100%" bottom="100%"/>
+
+  <space:Extent id="broll-goat-extent" width="768" height="768"/>
+  <space:Extent id="broll-hattrick-extent" width="768" height="768"/>
+  <space:AspectFrame id="broll-left-frame" within={vertical}
+    x="28%" y="73%" width="38%" aspect={broll-goat-extent} anchor="center"/>
+  <space:AspectFrame id="broll-right-frame" within={vertical}
+    x="72%" y="73%" width="38%" aspect={broll-hattrick-extent} anchor="center"/>
+
+  <pipeline:Normalize id="take-one-media" source={take-one.video}
+    video="primary-moving" audio="none" span-authority="video" clock={clock}/>
+  <pipeline:Normalize id="take-two-media" source={take-two.video}
+    video="primary-moving" audio="none" span-authority="video" clock={clock}/>
+  <pipeline:Normalize id="soundtrack-media" source={soundtrack}
+    video="none" audio="default" span-authority="audio" clock={clock}/>
+
+  <!-- Two local Wan takes form the 8-second presenter bed. -->
+  <media-track:Track id="presenter-track" timeline={program.timeline} canvas={vertical}>
+    <media-track:Item id="take-one-item" media={take-one-media.media}
+      at="0s" for="4s" frame={full-frame} appearance={recipes.media.performance}/>
+    <media-track:Item id="take-two-item" media={take-two-media.media}
+      at="4s" for="4s" frame={full-frame} appearance={recipes.media.performance}/>
+  </media-track:Track>
+
+  <!-- Generated local Z-Image cards exercise Hypit's timed B-roll composition. -->
+  <media-track:Track id="broll" timeline={program.timeline} canvas={vertical}>
+    <media-track:Item id="goat-card" image={broll-goat.image}
+      extent={broll-goat-extent} at="1.0s" for="1.3s"
+      frame={broll-left-frame} appearance={recipes.media.hair-gel}
+      motion={recipes.motion.broll-left}/>
+    <media-track:Item id="hattrick-card" image={broll-hattrick.image}
+      extent={broll-hattrick-extent} at="5.0s" for="1.3s"
+      frame={broll-right-frame} appearance={recipes.media.hat-trick}
+      motion={recipes.motion.broll-right}/>
+  </media-track:Track>
+
+  <fonts:Stack id="tier-font" family="inter" weight="400" style="normal"/>
+  <ranking:TierBoardStyle id="tier-style" recipe={recipes.ranking.football}
+    font={tier-font}/>
+
+  <!-- Preset-only board avoids speech/WhisperX dependencies while still exercising the official Ranking component. -->
+  <ranking:TierBoard id="football-tiers" timeline={program.timeline}
+    canvas={vertical} frame={tier-frame}
+    during="program" style={tier-style}>
+    <ranking:TierItem id="messi" tier="s" preset="true" icon={messi-icon}/>
+    <ranking:TierItem id="haaland" tier="a" preset="true" icon={haaland-icon}/>
+    <ranking:TierItem id="ronaldo" tier="d" preset="true" icon={ronaldo-icon}/>
+    <ranking:TierItem id="mbappe" tier="d" preset="true" icon={mbappe-icon}/>
+  </ranking:TierBoard>
+
+  <audio-track:Track id="music-bed" timeline={program.timeline}>
+    <audio-track:Item source={soundtrack-media.media} during="program"
+      playback="once-start" gain="0.10" fade-in="300ms" fade-out="500ms"/>
+  </audio-track:Track>
+
+  <film:Film id="main" canvas={vertical} timeline={program.timeline}
+    appearance={recipes.film.vertical}>
+    <film:Track source={presenter-track.visual}/>
+    <film:Track source={football-tiers.visual}/>
+    <film:Track source={broll.visual}/>
+    <film:Track source={music-bed.audio}/>
+  </film:Film>
+
+  <render:Video id="final" composition={main.composition}
+    timeline={program.timeline}/>
+</svml>
