@@ -213,3 +213,25 @@ Full local-agent instructions are in LOCAL_AGENT.md.
 Stop local mode after exiting Codex:
 
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File D:\AI\stop_local_agent.ps1
+
+
+## Reference smoke test
+
+A deterministic smoke-test plan for the trampoline reference is tracked at:
+
+    HypitProjects/TestVideo/plans/reference_test_plan.json
+
+Expected local input:
+
+    HypitProjects/TestVideo/input/reference.mp4
+
+Run:
+
+    cd D:\AI\HypitProjects\TestVideo
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_reference_test.ps1
+
+The runner validates the Hypit author/run files, executes local Z-Image -> Wan, retrieves local-video.video, reuses the reference audio when available, encodes H.264 1080x1920 and verifies the final file with ffprobe.
+
+Expected output:
+
+    D:\AI\HypitProjects\TestVideo\output\reference_remake.mp4
