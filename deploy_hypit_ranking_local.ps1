@@ -146,6 +146,14 @@ $runtime = [ordered]@{
     }
 }
 
+# HyperFrames defaults to browserGpu=hardware. On this Windows setup the Chrome
+# GPU capability probe emits BOM-prefixed JSON and fails before capture.
+# Software mode bypasses that probe; it may use more CPU, but is deterministic.
+if ($null -eq $runtime.endpoints.'hyperframes.local'.config) {
+    $runtime.endpoints.'hyperframes.local' | Add-Member -NotePropertyName config -NotePropertyValue ([pscustomobject]@{})
+}
+$runtime.endpoints.'hyperframes.local'.config | Add-Member -NotePropertyName browserGpu -NotePropertyValue 'software' -Force
+
 $runtimeJson = $runtime | ConvertTo-Json -Depth 30
 Write-Utf8NoBom -Path $RuntimeOutput -Content $runtimeJson
 
