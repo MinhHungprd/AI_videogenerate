@@ -4,7 +4,7 @@ $Root = $PSScriptRoot
 $Project = Join-Path $Root 'HypitProjects\TestVideo'
 $RuntimeDir = Join-Path $Root '.runtime'
 $PidFile = Join-Path $RuntimeDir 'ollama.pid'
-$Model = 'qwen3-vl:4b'
+$Model = 'qwen3.5:4b'
 $Health = 'http://127.0.0.1:11434/api/tags'
 
 $env:LOCAL_GENERATION_ONLY = 'true'
@@ -65,6 +65,17 @@ if (Test-Path -LiteralPath $reference) {
     & $prepareScript
     if ($LASTEXITCODE -ne 0) {
         throw "Reference preparation failed with exit code $LASTEXITCODE"
+    }
+
+    Write-Host '[INFO] Releasing WhisperX GPU memory after transcription...'
+    Push-Location $Project
+    try {
+        & hypit.cmd programs down --endpoint whisperx.local
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "Could not stop whisperx.local cleanly; continuing."
+        }
+    } finally {
+        Pop-Location
     }
 } else {
     Write-Warning "Reference video is missing: $reference"
